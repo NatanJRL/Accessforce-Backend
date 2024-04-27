@@ -21,10 +21,10 @@ public class ClienteRepository{
     );
 
 
-    UsuarioRepository usuarioRepository = new UsuarioRepository();
+    UsuarioRepository usuarioRepository;
 
     public ClienteRepository(){
-
+        this.usuarioRepository = new UsuarioRepository();
     }
 
     public Long inserirCliente(Cliente cliente) {

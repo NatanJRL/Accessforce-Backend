@@ -20,25 +20,7 @@ public class ClienteResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Cliente> listarClientes(){
 
-        List<Cliente> clientes = new ArrayList<>();
-
-        clientes.add(new Cliente(
-                "email@gmail.com",
-                "senha123",
-                "Nome Completo da Silva",
-                "função",
-                "02/02/2002",
-                new Endereco("São Paulo", "Brasil")));
-
-        clientes.add(new Cliente(
-                "email2@gmail.com",
-                "senha1234",
-                "Nome Completo de Oliveira",
-                "função 2",
-                "03/03/2003",
-                new Endereco("São Paulo", "Brasil")));
-
-        return clientes;
+        return clienteRepository.listarTodos();
     }
 
     @POST
