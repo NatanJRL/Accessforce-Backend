@@ -20,6 +20,7 @@ public class Endereco {
         this.estado = estado;
         this.pais = pais;
     }
+    public Endereco(){}
 
     public String getCep() {
         return cep;

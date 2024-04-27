@@ -6,22 +6,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Map;
 
 public class EnderecoRepository{
-    private Connection getConnection(){
-        String url = "jdbc:oracle:thin:@//oracle.fiap.com.br:1521/ORCL";
-        String usuario = "rm552626";
-        String senha = "080305";
 
-        try{
-            return DriverManager.getConnection(url, usuario, senha);
-        }catch (SQLException exception){
-            throw new RuntimeException(exception);
-        }
-    }
 
     public void inserirEndereco(Endereco endereco, Long idUsuario) {
-        try (Connection connection = this.getConnection();
+        try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
                      "insert into t_sf_endereco(id_usuario, cep, rua, bairro, cidade, estado, pais) values(?, ?, ?, ?, ?, ?, ?)");
         ) {

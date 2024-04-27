@@ -4,11 +4,10 @@ package br.com.fiap;
 import br.com.fiap.model.cliente.Cliente;
 import br.com.fiap.model.Endereco;
 import br.com.fiap.model.cliente.DadosInsercaoClienteDTO;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import br.com.fiap.repository.ClienteRepository;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +15,7 @@ import java.util.List;
 @Path("/clientes")
 public class ClienteResource {
 
+    private ClienteRepository clienteRepository = new ClienteRepository();
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Cliente> listarClientes(){
@@ -42,9 +42,12 @@ public class ClienteResource {
     }
 
     @POST
-    public void inserirCliente(DadosInsercaoClienteDTO insercaoClienteDTO){
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response inserirCliente(DadosInsercaoClienteDTO insercaoClienteDTO){
         Cliente cliente = new Cliente(insercaoClienteDTO);
-        //FAZER OS REPOSITORIES
+        clienteRepository.inserirCliente(cliente);
+
+        return Response.status(Response.Status.CREATED).build();
     }
 
 }
