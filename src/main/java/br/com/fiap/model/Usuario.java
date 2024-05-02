@@ -1,5 +1,7 @@
 package br.com.fiap.model;
 
+import br.com.fiap.model.endereco.Endereco;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -23,13 +25,14 @@ public abstract class Usuario {
         this.dataNascimento = formataData(dataNascimento);
         this.endereco = endereco;
     }
-    public Usuario(Long id, String email, String senha, String nomeCompleto, String dataRegistro, String dataNascimento){
+    public Usuario(Long id, String email, String senha, String nomeCompleto, String dataRegistro, String dataNascimento, Endereco endereco){
         this.id = id;
         this.email = email;
         this.senha = senha;
         this.nomeCompleto = nomeCompleto;
         this.dataDeRegistro = formataDataSQL(dataRegistro);
         this.dataNascimento = formataDataSQL(dataNascimento);
+        this.endereco = endereco;
     }
 
 

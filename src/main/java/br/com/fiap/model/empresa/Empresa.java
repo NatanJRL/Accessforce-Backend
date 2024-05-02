@@ -1,6 +1,6 @@
 package br.com.fiap.model.empresa;
 
-import br.com.fiap.model.Endereco;
+import br.com.fiap.model.endereco.Endereco;
 
 public class Empresa {
     private Long id;

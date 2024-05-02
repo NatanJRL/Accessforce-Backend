@@ -8,6 +8,8 @@ import java.util.Map;
 
 public class UsuarioRepository{
 
+    EnderecoRepository enderecoRepository = new EnderecoRepository();
+
     public final static Map<String, String> TABLE_COLUMNS = Map.of(
             "ID", "id_usuario",
             "EMAIL", "email",
@@ -33,6 +35,8 @@ public class UsuarioRepository{
                                              TABLE_COLUMNS.get("DATA_DE_NASCIMENTO")
                                      ), new String[]{"id_usuario"})
         ) {
+
+
             preparedStatement.setString(1, usuario.getEmail());
             preparedStatement.setString(2, usuario.getSenha());
             preparedStatement.setString(3, usuario.getNomeCompleto());
@@ -47,8 +51,7 @@ public class UsuarioRepository{
 
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()){
-                Long idGerado = generatedKeys.getLong(1);
-                return idGerado;
+                return generatedKeys.getLong(1);
             }
 
 

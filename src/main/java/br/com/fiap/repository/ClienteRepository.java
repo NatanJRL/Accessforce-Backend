@@ -1,15 +1,12 @@
 package br.com.fiap.repository;
 
-import br.com.fiap.ClienteResource;
 import br.com.fiap.model.cliente.Cliente;
+import br.com.fiap.model.endereco.Endereco;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 public class ClienteRepository{
 
@@ -19,7 +16,6 @@ public class ClienteRepository{
             "STATUS", "st_cliente",
             "FUNCAO", "nm_funcao"
     );
-
 
     UsuarioRepository usuarioRepository;
 
@@ -32,7 +28,10 @@ public class ClienteRepository{
                 Connection connection = DBConnection.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
                      "insert into t_sf_cliente(%s, %s, %s) values(?, ?, ?)"
-                             .formatted(TABLE_COLUMNS.get("ID_DE_USUARIO"), TABLE_COLUMNS.get("FUNCAO"),TABLE_COLUMNS.get("STATUS")));
+                             .formatted(
+                                     TABLE_COLUMNS.get("ID_DE_USUARIO"),
+                                     TABLE_COLUMNS.get("FUNCAO"),
+                                     TABLE_COLUMNS.get("STATUS")))
         ) {
             Long idUsuario = usuarioRepository.inserirUsuario(cliente);
             preparedStatement.setLong(1, idUsuario);
@@ -47,17 +46,37 @@ public class ClienteRepository{
         }
     }
 
-    public List<Cliente> listarTodos() {
-        try (
-                Connection conexao = DBConnection.getConnection();
-                Statement comandoSelect = conexao.createStatement()
-        ){
-            List<Cliente> retorno = new ArrayList<>();
+    public Cliente getClientById(Long id){
+        try (Connection conexao = DBConnection.getConnection();
+             Statement comandoSelect = conexao.createStatement();
+             ){
             ResultSet resultadoConsulta =
-                    comandoSelect.executeQuery("select * from t_sf_usuario u join t_sf_cliente c on u.%s = c.%s"
-                            .formatted(TABLE_COLUMNS.get("ID_DE_USUARIO"), UsuarioRepository.TABLE_COLUMNS.get("ID")));
+                    comandoSelect
+                            .executeQuery(
+                                    """
+                            select t_sf_usuario.*, t_sf_cliente.*, t_sf_endereco.%s, t_sf_endereco.%s
+                            from
+                            t_sf_usuario
+                            join
+                            t_sf_cliente on t_sf_usuario.%s = t_sf_cliente.%s
+                            join
+                            t_sf_endereco on t_sf_usuario.%s = t_sf_endereco.%s where t_sf_usuario.%s = %s
+                            order by t_sf_usuario.%s
+                            """
+                                            .formatted(
+                                                    EnderecoRepository.TABLE_COLUMNS.get("ESTADO"),
+                                                    EnderecoRepository.TABLE_COLUMNS.get("PAIS"),
+                                                    UsuarioRepository.TABLE_COLUMNS.get("ID"),
+                                                    TABLE_COLUMNS.get("ID_DE_USUARIO"),
+                                                    UsuarioRepository.TABLE_COLUMNS.get("ID"),
+                                                    EnderecoRepository.TABLE_COLUMNS.get("ID_DE_USUARIO"),
+                                                    UsuarioRepository.TABLE_COLUMNS.get("ID"),
+                                                    id,
+                                                    UsuarioRepository.TABLE_COLUMNS.get("ID")
+                                            ));
 
-            while(resultadoConsulta.next()){
+
+            if (resultadoConsulta.next()){
                 Long idUsuario = resultadoConsulta.getLong(TABLE_COLUMNS.get("ID_DE_USUARIO"));
                 String email = resultadoConsulta.getString(UsuarioRepository.TABLE_COLUMNS.get("EMAIL"));
                 String senha = resultadoConsulta.getString(UsuarioRepository.TABLE_COLUMNS.get("SENHA"));
@@ -66,9 +85,12 @@ public class ClienteRepository{
                 Date dataRegistro = resultadoConsulta.getDate(UsuarioRepository.TABLE_COLUMNS.get("DATA_DE_REGISTRO"));
                 Date dataNascimento = resultadoConsulta.getDate(UsuarioRepository.TABLE_COLUMNS.get("DATA_DE_NASCIMENTO"));
 
-                Long idCliente = resultadoConsulta.getLong(TABLE_COLUMNS.get("ID"));
                 String funcao = resultadoConsulta.getString(TABLE_COLUMNS.get("FUNCAO"));
                 boolean statusCliente = resultadoConsulta.getBoolean(TABLE_COLUMNS.get("STATUS"));
+
+                Endereco endereco = new Endereco(
+                        resultadoConsulta.getString(EnderecoRepository.TABLE_COLUMNS.get("ESTADO")),
+                        resultadoConsulta.getString(EnderecoRepository.TABLE_COLUMNS.get("PAIS")));
 
 
                 Cliente clienteLidoDoBanco = new Cliente(
@@ -78,7 +100,74 @@ public class ClienteRepository{
                         nomeCompleto,
                         funcao,
                         dataRegistro.toString(),
-                        dataNascimento.toString());
+                        dataNascimento.toString(),
+                        statusCliente,
+                        endereco);
+
+            return clienteLidoDoBanco;
+            }
+
+        }catch (SQLException exception){
+            throw new RuntimeException(exception);
+        }
+        return null;
+    }
+
+    public List<Cliente> listarTodos() {
+        try (
+                Connection conexao = DBConnection.getConnection();
+                Statement comandoSelect = conexao.createStatement()
+        ){
+            List<Cliente> retorno = new ArrayList<>();
+            ResultSet resultadoConsulta =
+                    comandoSelect.executeQuery("""
+                            select t_sf_usuario.*, t_sf_cliente.*, t_sf_endereco.%s, t_sf_endereco.%s
+                            from
+                            t_sf_usuario
+                            join
+                            t_sf_cliente on t_sf_usuario.%s = t_sf_cliente.%s
+                            join
+                            t_sf_endereco on t_sf_usuario.%s = t_sf_endereco.%s
+                            order by t_sf_usuario.%s
+                            """
+                            .formatted(
+                                    EnderecoRepository.TABLE_COLUMNS.get("ESTADO"),
+                                    EnderecoRepository.TABLE_COLUMNS.get("PAIS"),
+                                    UsuarioRepository.TABLE_COLUMNS.get("ID"),
+                                    TABLE_COLUMNS.get("ID_DE_USUARIO"),
+                                    UsuarioRepository.TABLE_COLUMNS.get("ID"),
+                                    EnderecoRepository.TABLE_COLUMNS.get("ID_DE_USUARIO"),
+                                    UsuarioRepository.TABLE_COLUMNS.get("ID")
+                                    ));
+
+            while(resultadoConsulta.next()){
+
+                Long idUsuario = resultadoConsulta.getLong(TABLE_COLUMNS.get("ID_DE_USUARIO"));
+                String email = resultadoConsulta.getString(UsuarioRepository.TABLE_COLUMNS.get("EMAIL"));
+                String senha = resultadoConsulta.getString(UsuarioRepository.TABLE_COLUMNS.get("SENHA"));
+                String nomeCompleto = resultadoConsulta.getString(UsuarioRepository.TABLE_COLUMNS.get("NOME_COMPLETO"));
+
+                Date dataRegistro = resultadoConsulta.getDate(UsuarioRepository.TABLE_COLUMNS.get("DATA_DE_REGISTRO"));
+                Date dataNascimento = resultadoConsulta.getDate(UsuarioRepository.TABLE_COLUMNS.get("DATA_DE_NASCIMENTO"));
+
+                String funcao = resultadoConsulta.getString(TABLE_COLUMNS.get("FUNCAO"));
+                boolean statusCliente = resultadoConsulta.getBoolean(TABLE_COLUMNS.get("STATUS"));
+
+                Endereco endereco = new Endereco(
+                        resultadoConsulta.getString(EnderecoRepository.TABLE_COLUMNS.get("ESTADO")),
+                        resultadoConsulta.getString(EnderecoRepository.TABLE_COLUMNS.get("PAIS")));
+
+
+                Cliente clienteLidoDoBanco = new Cliente(
+                        idUsuario,
+                        email,
+                        senha,
+                        nomeCompleto,
+                        funcao,
+                        dataRegistro.toString(),
+                        dataNascimento.toString(),
+                        statusCliente,
+                        endereco);
 
                 retorno.add(clienteLidoDoBanco);
             }
@@ -87,7 +176,9 @@ public class ClienteRepository{
                 return null;
             }
             return retorno;
-        }catch (SQLException ex){
+        }
+
+        catch (SQLException ex){
             throw new RuntimeException(ex);
         }
     }

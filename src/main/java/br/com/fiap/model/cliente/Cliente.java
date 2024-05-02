@@ -1,6 +1,6 @@
 package br.com.fiap.model.cliente;
 
-import br.com.fiap.model.Endereco;
+import br.com.fiap.model.endereco.Endereco;
 import br.com.fiap.model.Usuario;
 import br.com.fiap.model.empresa.Empresa;
 import br.com.fiap.model.telefone.Telefone;
@@ -26,10 +26,11 @@ public class Cliente extends Usuario {
     }
 
     //Construtor para resposta do banco
-    public Cliente(Long id, String email, String senha, String nomeCompleto, String funcao, String dataRegistro, String dataNascimento){
-        super(id, email, senha, nomeCompleto, dataRegistro, dataNascimento);
+    public Cliente(Long id, String email, String senha, String nomeCompleto, String funcao, String dataRegistro, String dataNascimento, boolean ativo, Endereco endereco){
+        super(id, email, senha, nomeCompleto, dataRegistro, dataNascimento, endereco);
         this.funcao = funcao;
-        this.ativo = true;
+        this.ativo = ativo;
+
     }
     public Cliente(DadosInsercaoClienteDTO dadosInsercaoClienteDTO){
         super(
@@ -37,7 +38,7 @@ public class Cliente extends Usuario {
                 dadosInsercaoClienteDTO.senha(),
                 dadosInsercaoClienteDTO.nomeCompleto(),
                 dadosInsercaoClienteDTO.dataNascimento(),
-                dadosInsercaoClienteDTO.endereco());
+                new Endereco(dadosInsercaoClienteDTO.endereco()));
         this.funcao = dadosInsercaoClienteDTO.funcao();
         this.ativo = true;
     }

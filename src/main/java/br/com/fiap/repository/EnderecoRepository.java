@@ -1,15 +1,25 @@
 package br.com.fiap.repository;
 
-import br.com.fiap.model.Endereco;
+import br.com.fiap.model.endereco.Endereco;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
 
 public class EnderecoRepository{
 
+    public static final Map<String, String> TABLE_COLUMNS =
+            Map.of(
+                    "ID_DE_ENDERECO", "id_endereco",
+                    "ID_DE_USUARIO", "id_usuario",
+                    "CEP", "cep",
+                    "RUA", "rua",
+                    "BAIRRO", "bairro",
+                    "CIDADE", "cidade",
+                    "ESTADO", "estado",
+                    "PAIS", "pais"
+            );
 
     public void inserirEndereco(Endereco endereco, Long idUsuario) {
         try (Connection connection = DBConnection.getConnection();

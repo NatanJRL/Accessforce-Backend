@@ -1,4 +1,4 @@
-package br.com.fiap.model;
+package br.com.fiap.model.endereco;
 
 public class Endereco {
     private String cep;
@@ -15,6 +15,23 @@ public class Endereco {
         this.cidade = cidade;
         this.estado = estado;
         this.pais = pais;
+    }
+    public Endereco(DadosInsercaoEnderecoDTO enderecoDTO){
+        if (enderecoDTO.cep() != null){
+            this.cep = enderecoDTO.cep();
+        }
+        if (enderecoDTO.rua() != null){
+            this.rua = enderecoDTO.rua();
+        }
+        if (enderecoDTO.bairro() != null){
+            this.rua = enderecoDTO.bairro();
+        }
+        if (enderecoDTO.cidade() != null){
+            this.rua = enderecoDTO.cidade();
+        }
+        this.estado = enderecoDTO.estado();
+
+        this.pais = enderecoDTO.pais();
     }
     public Endereco(String estado, String pais){
         this.estado = estado;
