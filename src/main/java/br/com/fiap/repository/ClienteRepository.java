@@ -1,7 +1,10 @@
 package br.com.fiap.repository;
 
 import br.com.fiap.model.cliente.Cliente;
+import br.com.fiap.model.empresa.Empresa;
+import br.com.fiap.model.empresa.TamanhoEmpresa;
 import br.com.fiap.model.endereco.Endereco;
+import oracle.jdbc.rowset.OracleWebRowSet;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -54,13 +57,14 @@ public class ClienteRepository{
                     comandoSelect
                             .executeQuery(
                                     """
-                            select t_sf_usuario.*, t_sf_cliente.*, t_sf_endereco.%s, t_sf_endereco.%s
+                            select t_sf_usuario.*, t_sf_cliente.*, t_sf_endereco.%s, t_sf_endereco.%s, t_sf_empresa.*
                             from
                             t_sf_usuario
                             join
                             t_sf_cliente on t_sf_usuario.%s = t_sf_cliente.%s
                             join
-                            t_sf_endereco on t_sf_usuario.%s = t_sf_endereco.%s where t_sf_usuario.%s = %s
+                            t_sf_endereco on t_sf_usuario.%s = t_sf_endereco.%s
+                            join t_sf_empresa on t_sf_cliente.%s = t_sf_empresa.%s where t_sf_usuario.%s = %s
                             order by t_sf_usuario.%s
                             """
                                             .formatted(
@@ -70,9 +74,11 @@ public class ClienteRepository{
                                                     TABLE_COLUMNS.get("ID_DE_USUARIO"),
                                                     UsuarioRepository.TABLE_COLUMNS.get("ID"),
                                                     EnderecoRepository.TABLE_COLUMNS.get("ID_DE_USUARIO"),
+                                                    ClienteRepository.TABLE_COLUMNS.get("ID"),
+                                                    EmpresaRepository.TABLE_COLUMNS.get("ID_DO_CLIENTE"),
                                                     UsuarioRepository.TABLE_COLUMNS.get("ID"),
                                                     id,
-                                                    UsuarioRepository.TABLE_COLUMNS.get("ID")
+                                                    UsuarioRepository.TABLE_COLUMNS.get ("ID")
                                             ));
 
 
@@ -92,6 +98,11 @@ public class ClienteRepository{
                         resultadoConsulta.getString(EnderecoRepository.TABLE_COLUMNS.get("ESTADO")),
                         resultadoConsulta.getString(EnderecoRepository.TABLE_COLUMNS.get("PAIS")));
 
+                String nomeEmpresa = resultadoConsulta.getString(EmpresaRepository.TABLE_COLUMNS.get("NOME_DA_EMPRESA"));
+                TamanhoEmpresa tamanhoEmpresa = TamanhoEmpresa.valueOf(resultadoConsulta.getString(EmpresaRepository.TABLE_COLUMNS.get("TAMANHO_DA_EMPRESA")));
+
+
+                Empresa empresa = new Empresa(nomeEmpresa, tamanhoEmpresa);
 
                 Cliente clienteLidoDoBanco = new Cliente(
                         idUsuario,
@@ -102,7 +113,8 @@ public class ClienteRepository{
                         dataRegistro.toString(),
                         dataNascimento.toString(),
                         statusCliente,
-                        endereco);
+                        endereco,
+                        empresa);
 
             return clienteLidoDoBanco;
             }
@@ -121,14 +133,14 @@ public class ClienteRepository{
             List<Cliente> retorno = new ArrayList<>();
             ResultSet resultadoConsulta =
                     comandoSelect.executeQuery("""
-                            select t_sf_usuario.*, t_sf_cliente.*, t_sf_endereco.%s, t_sf_endereco.%s
+                            select t_sf_usuario.*, t_sf_cliente.*, t_sf_endereco.%s, t_sf_endereco.%s, t_sf_empresa.*
                             from
                             t_sf_usuario
                             join
                             t_sf_cliente on t_sf_usuario.%s = t_sf_cliente.%s
                             join
                             t_sf_endereco on t_sf_usuario.%s = t_sf_endereco.%s
-                            order by t_sf_usuario.%s
+                            join t_sf_empresa on t_sf_cliente.%s = t_sf_empresa.%s
                             """
                             .formatted(
                                     EnderecoRepository.TABLE_COLUMNS.get("ESTADO"),
@@ -137,7 +149,8 @@ public class ClienteRepository{
                                     TABLE_COLUMNS.get("ID_DE_USUARIO"),
                                     UsuarioRepository.TABLE_COLUMNS.get("ID"),
                                     EnderecoRepository.TABLE_COLUMNS.get("ID_DE_USUARIO"),
-                                    UsuarioRepository.TABLE_COLUMNS.get("ID")
+                                    TABLE_COLUMNS.get("ID"),
+                                    EmpresaRepository.TABLE_COLUMNS.get("ID_DO_CLIENTE")
                                     ));
 
             while(resultadoConsulta.next()){
@@ -153,10 +166,14 @@ public class ClienteRepository{
                 String funcao = resultadoConsulta.getString(TABLE_COLUMNS.get("FUNCAO"));
                 boolean statusCliente = resultadoConsulta.getBoolean(TABLE_COLUMNS.get("STATUS"));
 
+                String nomeEmpresa = resultadoConsulta.getString(EmpresaRepository.TABLE_COLUMNS.get("NOME_DA_EMPRESA"));
+                TamanhoEmpresa tamanhoEmpresa = TamanhoEmpresa.valueOf(resultadoConsulta.getString(EmpresaRepository.TABLE_COLUMNS.get("TAMANHO_DA_EMPRESA")));
+
                 Endereco endereco = new Endereco(
                         resultadoConsulta.getString(EnderecoRepository.TABLE_COLUMNS.get("ESTADO")),
                         resultadoConsulta.getString(EnderecoRepository.TABLE_COLUMNS.get("PAIS")));
 
+                Empresa empresa = new Empresa(nomeEmpresa, tamanhoEmpresa);
 
                 Cliente clienteLidoDoBanco = new Cliente(
                         idUsuario,
@@ -167,7 +184,8 @@ public class ClienteRepository{
                         dataRegistro.toString(),
                         dataNascimento.toString(),
                         statusCliente,
-                        endereco);
+                        endereco,
+                        empresa);
 
                 retorno.add(clienteLidoDoBanco);
             }
