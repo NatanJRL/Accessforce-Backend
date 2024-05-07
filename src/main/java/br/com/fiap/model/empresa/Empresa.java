@@ -4,17 +4,31 @@ import br.com.fiap.model.endereco.Endereco;
 
 public class Empresa {
     private Long id;
-    private String cnpj;
     private String nome;
     private TamanhoEmpresa tamanhoEmpresa;
-    private Endereco endereco;
 
-    public Empresa(String cnpj, String nome, TamanhoEmpresa tamanhoEmpresa, Endereco endereco){
-        this.cnpj = cnpj;
+    public Empresa(String nome, TamanhoEmpresa tamanhoEmpresa){
         this.nome = nome;
         this.tamanhoEmpresa = tamanhoEmpresa;
-        this.endereco = endereco;
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public TamanhoEmpresa getTamanhoEmpresa() {
+        return tamanhoEmpresa;
+    }
+
+    public void setTamanhoEmpresa(TamanhoEmpresa tamanhoEmpresa) {
+        this.tamanhoEmpresa = tamanhoEmpresa;
+    }
 }

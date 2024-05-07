@@ -26,11 +26,22 @@ public class Cliente extends Usuario {
     }
 
     //Construtor para resposta do banco
-    public Cliente(Long id, String email, String senha, String nomeCompleto, String funcao, String dataRegistro, String dataNascimento, boolean ativo, Endereco endereco){
+    public Cliente(
+            Long id,
+            String email,
+            String senha,
+            String nomeCompleto,
+            String funcao,
+            String dataRegistro,
+            String dataNascimento,
+            boolean ativo,
+            Endereco endereco,
+            Empresa empresa
+    ){
         super(id, email, senha, nomeCompleto, dataRegistro, dataNascimento, endereco);
         this.funcao = funcao;
         this.ativo = ativo;
-
+        this.empresa = empresa;
     }
     public Cliente(DadosInsercaoClienteDTO dadosInsercaoClienteDTO){
         super(

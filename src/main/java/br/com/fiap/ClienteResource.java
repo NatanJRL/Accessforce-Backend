@@ -20,24 +20,23 @@ public class ClienteResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Cliente> listarClientes(){
-
         return clienteRepository.listarTodos();
     }
-
+    @GET
+    @Path(("{id}"))
+    @Produces(MediaType.APPLICATION_JSON)
+    public Cliente listarClientePorId(@PathParam("id") Long id){
+        return clienteRepository.getClientById(id);
+    }
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response inserirCliente(@Valid DadosInsercaoClienteDTO insercaoClienteDTO){
         Cliente cliente = new Cliente(insercaoClienteDTO);
         long id = clienteRepository.inserirCliente(cliente);
         enderecoRepository.inserirEndereco(cliente.getEndereco(), id);
-
-
         return Response.status(Response.Status.CREATED).build();
     }
 
-    @GET
-    @Path(("{id}"))
-    public Cliente listarClientePorId(@PathParam("id") Long id){
-        return clienteRepository.getClientById(id);
-    }
 }
+
+
