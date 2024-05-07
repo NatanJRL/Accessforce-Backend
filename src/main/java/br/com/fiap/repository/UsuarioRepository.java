@@ -1,6 +1,6 @@
 package br.com.fiap.repository;
 
-import br.com.fiap.model.Usuario;
+import br.com.fiap.model.usuario.Usuario;
 
 import java.sql.*;
 import java.time.LocalDate;

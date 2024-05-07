@@ -1,7 +1,7 @@
 package br.com.fiap.model.cliente;
 
 import br.com.fiap.model.endereco.Endereco;
-import br.com.fiap.model.Usuario;
+import br.com.fiap.model.usuario.Usuario;
 import br.com.fiap.model.empresa.Empresa;
 import br.com.fiap.model.telefone.Telefone;
 import br.com.fiap.produto.ClienteJaPossuiProdutoException;
