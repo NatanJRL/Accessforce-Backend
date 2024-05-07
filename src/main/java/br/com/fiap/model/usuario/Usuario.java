@@ -1,4 +1,4 @@
-package br.com.fiap.model;
+package br.com.fiap.model.usuario;
 
 import br.com.fiap.model.endereco.Endereco;
 
