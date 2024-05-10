@@ -37,9 +37,9 @@ public class ClienteService {
     public void inserir(DadosInsercaoClienteDTO dados){
         Cliente cliente = new Cliente(dados);
         long idCliente = clienteRepository.inserirCliente(cliente);
-
         //FAZER DEPOIS
-        telefoneReposirory.inserirTelefone(cliente.getTelefones().get(0), idCliente);
+
+        telefoneReposirory.inserirTelefone(cliente.getTelefone(), idCliente);
         enderecoRepository.inserirEndereco(cliente.getEndereco(), idCliente);
     }
 }

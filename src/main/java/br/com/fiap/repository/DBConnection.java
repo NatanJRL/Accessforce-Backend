@@ -9,7 +9,6 @@ import java.util.Properties;
 
 public class DBConnection {
 
-
     static Connection getConnection(){
         Properties databaseProperties = readDatabaseProperties();
         String URL_ORACLE = databaseProperties.getProperty("jdbc.url");

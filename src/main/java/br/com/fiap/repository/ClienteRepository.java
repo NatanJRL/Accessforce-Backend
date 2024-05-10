@@ -94,6 +94,7 @@ public class ClienteRepository{
                 Statement comandoSelect = connection.createStatement()
         ){
             List<Cliente> retorno = new ArrayList<>();
+
             ResultSet resultSet =
                     comandoSelect.executeQuery("""
                             select t_sf_usuario.*, t_sf_cliente.*, t_sf_endereco.%s, t_sf_endereco.%s, t_sf_empresa.*
