@@ -18,11 +18,13 @@ public class Cliente extends Usuario {
     private Empresa empresa;
 
 
-    //Construtor para criação pelo terminal
-    public Cliente(String email, String senha, String nomeCompleto, String funcao, String dataNascimento, Endereco endereco){
+    //Construtor para criação através do insert into
+    public Cliente(String email, String senha, String nomeCompleto,Telefone telefone, Empresa empresa,String funcao, String dataNascimento, Endereco endereco){
         super(email, senha, nomeCompleto, dataNascimento, endereco);
         this.funcao = funcao;
         this.ativo = true;
+        this.telefones.add(telefone);
+        this.empresa = empresa;
     }
 
     //Construtor para resposta do banco
@@ -43,6 +45,7 @@ public class Cliente extends Usuario {
         this.ativo = ativo;
         this.empresa = empresa;
     }
+    //construtor para envio serializado
     public Cliente(DadosInsercaoClienteDTO dadosInsercaoClienteDTO){
         super(
                 dadosInsercaoClienteDTO.email(),
@@ -98,5 +101,9 @@ public class Cliente extends Usuario {
 
     public boolean isAtivo() {
         return ativo;
+    }
+
+    public List<Telefone> getTelefones() {
+        return telefones;
     }
 }

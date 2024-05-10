@@ -54,14 +54,12 @@ public class UsuarioRepository{
                 return generatedKeys.getLong(1);
             }
 
-
             return preparedStatement.getGeneratedKeys().getLong(1);
 
         }catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
     }
-
 }
 
 

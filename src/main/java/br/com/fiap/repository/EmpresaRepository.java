@@ -30,6 +30,7 @@ public class EmpresaRepository {
             statement.setString(2, empresa.getNome());
             statement.setString(3, empresa.getTamanhoEmpresa().toString());
 
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
