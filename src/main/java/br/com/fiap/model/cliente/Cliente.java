@@ -53,6 +53,8 @@ public class Cliente extends Usuario {
                 dadosInsercaoClienteDTO.nomeCompleto(),
                 dadosInsercaoClienteDTO.dataNascimento(),
                 new Endereco(dadosInsercaoClienteDTO.endereco()));
+
+        this.telefones.add(new Telefone(dadosInsercaoClienteDTO));
         this.funcao = dadosInsercaoClienteDTO.funcao();
         this.ativo = true;
     }
@@ -103,7 +105,7 @@ public class Cliente extends Usuario {
         return ativo;
     }
 
-    public List<Telefone> getTelefones() {
-        return telefones;
+    public Telefone getTelefoneById(int id) {
+        return telefones.get(id);
     }
 }

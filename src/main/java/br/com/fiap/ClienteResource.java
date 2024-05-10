@@ -4,6 +4,7 @@ package br.com.fiap;
 import br.com.fiap.model.cliente.DadosInsercaoClienteDTO;
 import br.com.fiap.model.cliente.ListagemClienteDTO;
 import br.com.fiap.service.ClienteService;
+import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -33,10 +34,6 @@ public class ClienteResource {
         clienteService.inserir(insercaoClienteDTO);
         return Response.status(Response.Status.CREATED).build();
     }
-
-
-
-
 }
 
 
