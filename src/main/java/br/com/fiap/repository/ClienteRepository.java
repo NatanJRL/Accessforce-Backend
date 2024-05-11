@@ -4,6 +4,8 @@ import br.com.fiap.model.cliente.Cliente;
 import br.com.fiap.model.empresa.Empresa;
 import br.com.fiap.model.empresa.TamanhoEmpresa;
 import br.com.fiap.model.endereco.Endereco;
+import br.com.fiap.model.telefone.Telefone;
+import br.com.fiap.model.telefone.TipoTelefone;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -49,20 +51,26 @@ public class ClienteRepository{
     }
 
     public Cliente getClientById(Long id){
-        try (Connection connection = DBConnection.getConnection();
-             Statement comandoSelect = connection.createStatement()){
+        try (
+             Connection connection = DBConnection.getConnection();
+             Statement comandoSelect = connection.createStatement()
+        ){
 
-            ResultSet resultSet =
+             ResultSet resultSet =
                     comandoSelect.executeQuery(
                                     """
-                            select t_sf_usuario.*, t_sf_cliente.*, t_sf_endereco.%s, t_sf_endereco.%s, t_sf_empresa.*
+                            select t_sf_usuario.*, t_sf_cliente.*, t_sf_endereco.%s, t_sf_endereco.%s, t_sf_empresa.*, t_sf_telefone.*
                             from
                             t_sf_usuario
                             join
                             t_sf_cliente on t_sf_usuario.%s = t_sf_cliente.%s
                             join
                             t_sf_endereco on t_sf_usuario.%s = t_sf_endereco.%s
-                            join t_sf_empresa on t_sf_cliente.%s = t_sf_empresa.%s where t_sf_usuario.%s = %s
+                            join
+                            t_sf_empresa on t_sf_cliente.%s = t_sf_empresa.%s
+                            join
+                            t_sf_telefone on t_sf_cliente.%s = t_sf_telefone.%s
+                            where t_sf_usuario.%s = %s
                             order by t_sf_usuario.%s
                             """.formatted(
                                             EnderecoRepository.TABLE_COLUMNS.get("ESTADO"),
@@ -71,8 +79,10 @@ public class ClienteRepository{
                                             TABLE_COLUMNS.get("ID_DE_USUARIO"),
                                             UsuarioRepository.TABLE_COLUMNS.get("ID"),
                                             EnderecoRepository.TABLE_COLUMNS.get("ID_DE_USUARIO"),
-                                            ClienteRepository.TABLE_COLUMNS.get("ID"),
+                                            TABLE_COLUMNS.get("ID"),
                                             EmpresaRepository.TABLE_COLUMNS.get("ID_DO_CLIENTE"),
+                                            TABLE_COLUMNS.get("ID"),
+                                            TelefoneRepository.TABLE_COLUMNS.get("ID"),
                                             UsuarioRepository.TABLE_COLUMNS.get("ID"),
                                             id,
                                             UsuarioRepository.TABLE_COLUMNS.get ("ID")
@@ -96,17 +106,21 @@ public class ClienteRepository{
             List<Cliente> retorno = new ArrayList<>();
 
             ResultSet resultSet =
-                    comandoSelect.executeQuery("""
-                            select t_sf_usuario.*, t_sf_cliente.*, t_sf_endereco.%s, t_sf_endereco.%s, t_sf_empresa.*
-                            from
-                            t_sf_usuario
-                            join
-                            t_sf_cliente on t_sf_usuario.%s = t_sf_cliente.%s
-                            join
-                            t_sf_endereco on t_sf_usuario.%s = t_sf_endereco.%s
-                            join t_sf_empresa on t_sf_cliente.%s = t_sf_empresa.%s
+                    comandoSelect.executeQuery(
                             """
-                            .formatted(
+                    select t_sf_usuario.*, t_sf_cliente.*, t_sf_endereco.%s, t_sf_endereco.%s, t_sf_empresa.*, t_sf_telefone.*
+                    from
+                    t_sf_usuario
+                    join
+                    t_sf_cliente on t_sf_usuario.%s = t_sf_cliente.%s
+                    join
+                    t_sf_endereco on t_sf_usuario.%s = t_sf_endereco.%s
+                    join
+                    t_sf_empresa on t_sf_cliente.%s = t_sf_empresa.%s
+                    join
+                    t_sf_telefone on t_sf_cliente.%s = t_sf_telefone.%s
+                    order by t_sf_usuario.%s
+                    """.formatted(
                                     EnderecoRepository.TABLE_COLUMNS.get("ESTADO"),
                                     EnderecoRepository.TABLE_COLUMNS.get("PAIS"),
                                     UsuarioRepository.TABLE_COLUMNS.get("ID"),
@@ -114,8 +128,11 @@ public class ClienteRepository{
                                     UsuarioRepository.TABLE_COLUMNS.get("ID"),
                                     EnderecoRepository.TABLE_COLUMNS.get("ID_DE_USUARIO"),
                                     TABLE_COLUMNS.get("ID"),
-                                    EmpresaRepository.TABLE_COLUMNS.get("ID_DO_CLIENTE")
-                                    ));
+                                    EmpresaRepository.TABLE_COLUMNS.get("ID_DO_CLIENTE"),
+                                    TABLE_COLUMNS.get("ID"),
+                                    TelefoneRepository.TABLE_COLUMNS.get("ID"),
+                                    UsuarioRepository.TABLE_COLUMNS.get("ID")
+                            ));
 
             while(resultSet.next()){
                 retorno.add(createClienteFromResultSet(resultSet));
@@ -146,8 +163,14 @@ public class ClienteRepository{
                 new Empresa(
                         resultSet.getString(EmpresaRepository.TABLE_COLUMNS.get("NOME_DA_EMPRESA")),
                         TamanhoEmpresa.valueOf(resultSet.getString(
-                                EmpresaRepository.TABLE_COLUMNS.get("TAMANHO_DA_EMPRESA"))))
-        );
+                                EmpresaRepository.TABLE_COLUMNS.get("TAMANHO_DA_EMPRESA")))),
+
+                new Telefone(
+                        resultSet.getLong(TelefoneRepository.TABLE_COLUMNS.get("ID")),
+                        resultSet.getString(TelefoneRepository.TABLE_COLUMNS.get("NUMERO")),
+                        resultSet.getInt(TelefoneRepository.TABLE_COLUMNS.get("DDD")),
+                        resultSet.getString(TelefoneRepository.TABLE_COLUMNS.get("OBSERVACOES")),
+                        TipoTelefone.valueOf(resultSet.getString(TelefoneRepository.TABLE_COLUMNS.get("TIPO_TELEFONE")))));
     }
 }
 

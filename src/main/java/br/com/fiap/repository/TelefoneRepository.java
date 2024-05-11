@@ -5,9 +5,18 @@ import br.com.fiap.model.telefone.Telefone;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Map;
 
 public class TelefoneRepository {
 
+    public static final Map<String, String> TABLE_COLUMNS = Map.of(
+            "ID", "id_telefone",
+            "ID_DO_CLIENTE", "id_cliente",
+            "NUMERO", "nmr_telefone",
+            "DDD", "ddd_telefone",
+            "TIPO_TELEFONE", "tp_telefone",
+            "OBSERVACOES", "obs_telefone"
+    );
     public void inserirTelefone(Telefone telefone, Long idCliente){
         try(Connection connection = DBConnection.getConnection();
             PreparedStatement statement =

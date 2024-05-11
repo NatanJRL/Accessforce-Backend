@@ -12,6 +12,10 @@ public class Empresa {
         this.tamanhoEmpresa = tamanhoEmpresa;
     }
 
+    public Empresa(DadosInsercaoEmpresaDTO dados){
+        this.nome = dados.nome();
+        this.tamanhoEmpresa = dados.tamanhoEmpresa();
+    }
     public Long getId() {
         return id;
     }

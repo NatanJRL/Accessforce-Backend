@@ -2,8 +2,10 @@ package br.com.fiap.model.cliente;
 
 import br.com.fiap.model.empresa.Empresa;
 import br.com.fiap.model.endereco.ListagemEnderecoDTO;
+import br.com.fiap.model.telefone.Telefone;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record ListagemClienteDTO(
 
@@ -17,7 +19,8 @@ public record ListagemClienteDTO(
         ListagemEnderecoDTO endereco,
         String funcao,
         boolean ativo,
-        Empresa empresa
+        Empresa empresa,
+        List<Telefone> telefones
 ) {
 
     //construtor recebendo cliente
@@ -33,7 +36,8 @@ public record ListagemClienteDTO(
                 new ListagemEnderecoDTO(cliente.getEndereco().getEstado(), cliente.getEndereco().getPais()),
                 cliente.getFuncao(),
                 cliente.isAtivo(),
-                cliente.getEmpresa()
+                cliente.getEmpresa(),
+                cliente.getTelefones()
         );
 }
 }

@@ -22,7 +22,7 @@ public class EmpresaRepository {
                     """
                     .formatted(
                             TABLE_COLUMNS.get("ID_DO_CLIENTE"),
-                            TABLE_COLUMNS.get("NOME"),
+                            TABLE_COLUMNS.get("NOME_DA_EMPRESA"),
                             TABLE_COLUMNS.get("TAMANHO_DA_EMPRESA")
             ))){
 

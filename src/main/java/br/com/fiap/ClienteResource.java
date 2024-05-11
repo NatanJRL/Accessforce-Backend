@@ -31,8 +31,12 @@ public class ClienteResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response inserirCliente(@Valid DadosInsercaoClienteDTO insercaoClienteDTO){
-        clienteService.inserir(insercaoClienteDTO);
-        return Response.status(Response.Status.CREATED).build();
+        try {
+            clienteService.inserir(insercaoClienteDTO);
+            return Response.status(Response.Status.CREATED).build();
+        }catch (Exception ex){
+            return Response.status(Response.Status.CONFLICT).build();
+        }
     }
 }
 

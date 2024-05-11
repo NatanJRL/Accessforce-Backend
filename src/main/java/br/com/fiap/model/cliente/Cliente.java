@@ -38,12 +38,14 @@ public class Cliente extends Usuario {
             String dataNascimento,
             boolean ativo,
             Endereco endereco,
-            Empresa empresa
+            Empresa empresa,
+            Telefone telefone
     ){
         super(id, email, senha, nomeCompleto, dataRegistro, dataNascimento, endereco);
         this.funcao = funcao;
         this.ativo = ativo;
         this.empresa = empresa;
+        this.telefones.add(telefone);
     }
     //construtor para envio serializado
     public Cliente(DadosInsercaoClienteDTO dadosInsercaoClienteDTO){
@@ -54,7 +56,7 @@ public class Cliente extends Usuario {
                 dadosInsercaoClienteDTO.dataNascimento(),
                 new Endereco(dadosInsercaoClienteDTO.endereco()));
 
-        this.telefones.add(new Telefone(dadosInsercaoClienteDTO));
+        this.telefones.add(new Telefone(dadosInsercaoClienteDTO.telefone()));
         this.funcao = dadosInsercaoClienteDTO.funcao();
         this.ativo = true;
     }
@@ -105,7 +107,7 @@ public class Cliente extends Usuario {
         return ativo;
     }
 
-    public Telefone getTelefoneById(int id) {
-        return telefones.get(id);
+    public List<Telefone>getTelefones() {
+        return this.telefones;
     }
 }
