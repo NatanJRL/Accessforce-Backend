@@ -5,12 +5,14 @@ import br.com.fiap.model.cliente.DadosAtualizacaoClienteDTO;
 import br.com.fiap.model.cliente.DadosInsercaoClienteDTO;
 import br.com.fiap.model.cliente.ListagemClienteDTO;
 import br.com.fiap.model.empresa.Empresa;
+import br.com.fiap.model.endereco.Endereco;
 import br.com.fiap.model.telefone.Telefone;
 import br.com.fiap.repository.ClienteRepository;
 import br.com.fiap.repository.EmpresaRepository;
 import br.com.fiap.repository.EnderecoRepository;
 import br.com.fiap.repository.TelefoneRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -66,15 +68,14 @@ public class ClienteService {
         if (dados.nomeCompleto() != null) cliente.setNomeCompleto(dados.nomeCompleto());
 
 
-//CONTINUAR DEPOIS
 //        if (dados.dataNascimento() != null) cliente.setDataNascimento(dados.dataNascimento());
-//
-//        if (dados.endereco() != null) cliente.setEndereco(dados.endereco());
-//
-//        if (dados.funcao() != null) cliente.setFuncao(dados.funcao());
-//
-//        if (dados.empresa() != null) cliente.setEmpresa(dados.empresa());
-//
-//        if (dados.telefone() != null) cliente.setTelefones(dados.telefone());
-    }
+
+        if (dados.endereco() != null) cliente.setEndereco(new Endereco(dados.endereco()));
+
+        if (dados.funcao() != null) cliente.setFuncao(dados.funcao());
+
+        if (dados.empresa() != null) cliente.setEmpresa(new Empresa(dados.empresa()));
+
+        if (dados.telefone() != null) cliente.setTelefones(List.of(new Telefone(dados.telefone())));
+}
 }

@@ -13,4 +13,5 @@ public record DadosInsercaoTelefone(
         @NotNull
         TipoTelefone tipoTelefone
 ) {
+
 }
