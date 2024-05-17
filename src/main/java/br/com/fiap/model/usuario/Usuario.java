@@ -22,7 +22,7 @@ public abstract class Usuario {
         this.senha = senha;
         this.nomeCompleto = nomeCompleto;
         this.dataDeRegistro = LocalDate.now();
-        this.dataNascimento = formataData(dataNascimento);
+        this.dataNascimento = formataDataSQL(dataNascimento);
         this.endereco = endereco;
     }
     public Usuario(Long id, String email, String senha, String nomeCompleto, String dataRegistro, String dataNascimento, Endereco endereco){
@@ -113,6 +113,34 @@ public abstract class Usuario {
 
     public Endereco getEndereco() {
         return endereco;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public void setDataDeRegistro(LocalDate dataDeRegistro) {
+        this.dataDeRegistro = dataDeRegistro;
+    }
+
+    public void setNomeCompleto(String nomeCompleto) {
+        this.nomeCompleto = nomeCompleto;
+    }
+
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 }
 

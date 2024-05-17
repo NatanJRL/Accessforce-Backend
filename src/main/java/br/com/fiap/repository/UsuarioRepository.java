@@ -49,13 +49,11 @@ public class UsuarioRepository{
 
             preparedStatement.executeUpdate();
 
-            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-            if (generatedKeys.next()){
-                return generatedKeys.getLong(1);
+            if (preparedStatement.getGeneratedKeys().next()){
+                return preparedStatement.getGeneratedKeys().getLong(1);
             }
 
-            return preparedStatement.getGeneratedKeys().getLong(1);
-
+            return null;
         }catch (SQLException ex) {
             throw new RuntimeException(ex);
         }

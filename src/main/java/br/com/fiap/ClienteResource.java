@@ -1,6 +1,7 @@
 package br.com.fiap;
 
 
+import br.com.fiap.model.cliente.DadosAtualizacaoClienteDTO;
 import br.com.fiap.model.cliente.DadosInsercaoClienteDTO;
 import br.com.fiap.model.cliente.ListagemClienteDTO;
 import br.com.fiap.service.ClienteService;
@@ -31,12 +32,21 @@ public class ClienteResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response inserirCliente(@Valid DadosInsercaoClienteDTO insercaoClienteDTO){
-        try {
             clienteService.inserir(insercaoClienteDTO);
             return Response.status(Response.Status.CREATED).build();
-        }catch (Exception ex){
-            return Response.status(Response.Status.CONFLICT).build();
-        }
+
+    }
+
+    @PUT
+    public void atualizarCliente(DadosAtualizacaoClienteDTO dadosAtualizacao){
+        clienteService.atualizar(dadosAtualizacao);
+    }
+
+    @DELETE
+    @Path("{id}")
+    public Response deletarCliente(@PathParam("id") Long id){
+        clienteService.deletar(id);
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 }
 

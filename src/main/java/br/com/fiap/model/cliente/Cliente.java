@@ -110,4 +110,20 @@ public class Cliente extends Usuario {
     public List<Telefone>getTelefones() {
         return this.telefones;
     }
+
+    public void setFuncao(String funcao) {
+        this.funcao = funcao;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public void setTelefones(List<Telefone> telefones) {
+        this.telefones = telefones;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
 }

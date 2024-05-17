@@ -1,6 +1,7 @@
 package br.com.fiap.service;
 
 import br.com.fiap.model.cliente.Cliente;
+import br.com.fiap.model.cliente.DadosAtualizacaoClienteDTO;
 import br.com.fiap.model.cliente.DadosInsercaoClienteDTO;
 import br.com.fiap.model.cliente.ListagemClienteDTO;
 import br.com.fiap.model.empresa.Empresa;
@@ -50,5 +51,30 @@ public class ClienteService {
         enderecoRepository.inserirEndereco(cliente.getEndereco(), idCliente);
         empresaRepository.inserirEmpresa(empresa, idCliente);
 
+    }
+    public void deletar(Long id){
+        clienteRepository.deletarCliente(id);
+    }
+
+    public void atualizar(DadosAtualizacaoClienteDTO dados) {
+        Cliente cliente = clienteRepository.getClientById(dados.id());
+
+        if (dados.email() != null) cliente.setEmail(dados.email());
+
+        if (dados.senha() != null) cliente.setSenha(dados.senha());
+
+        if (dados.nomeCompleto() != null) cliente.setNomeCompleto(dados.nomeCompleto());
+
+
+//CONTINUAR DEPOIS
+//        if (dados.dataNascimento() != null) cliente.setDataNascimento(dados.dataNascimento());
+//
+//        if (dados.endereco() != null) cliente.setEndereco(dados.endereco());
+//
+//        if (dados.funcao() != null) cliente.setFuncao(dados.funcao());
+//
+//        if (dados.empresa() != null) cliente.setEmpresa(dados.empresa());
+//
+//        if (dados.telefone() != null) cliente.setTelefones(dados.telefone());
     }
 }

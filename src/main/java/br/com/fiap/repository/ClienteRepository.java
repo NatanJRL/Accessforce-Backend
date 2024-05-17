@@ -6,6 +6,7 @@ import br.com.fiap.model.empresa.TamanhoEmpresa;
 import br.com.fiap.model.endereco.Endereco;
 import br.com.fiap.model.telefone.Telefone;
 import br.com.fiap.model.telefone.TipoTelefone;
+import oracle.jdbc.proxy.annotation.Pre;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -147,6 +148,30 @@ public class ClienteRepository{
         }
     }
 
+    public void deletarCliente(Long id){
+        try(
+                Connection conn = DBConnection.getConnection();
+                PreparedStatement statement = conn.prepareStatement("update t_sf_cliente set %s = 0 where id_cliente = ?"
+                        .formatted(TABLE_COLUMNS.get("STATUS")));
+                ){
+            statement.setLong(1, id);
+            statement.executeUpdate();
+
+        }catch (SQLException ex){
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
+
+    public void atualizarCliente(Cliente cliente){
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement statement = conn.prepareStatement("update t_sf_cliente set %s = ? where id_cliente = ?".formatted())
+        ){
+
+        }catch (SQLException ex){
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
+
     private Cliente createClienteFromResultSet(ResultSet resultSet) throws SQLException{
         return new Cliente(
                 resultSet.getLong(TABLE_COLUMNS.get("ID_DE_USUARIO")),
@@ -172,5 +197,7 @@ public class ClienteRepository{
                         resultSet.getString(TelefoneRepository.TABLE_COLUMNS.get("OBSERVACOES")),
                         TipoTelefone.valueOf(resultSet.getString(TelefoneRepository.TABLE_COLUMNS.get("TIPO_TELEFONE")))));
     }
+
+
 }
 
