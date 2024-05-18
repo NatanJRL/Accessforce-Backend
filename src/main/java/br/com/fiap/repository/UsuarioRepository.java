@@ -58,6 +58,38 @@ public class UsuarioRepository{
             throw new RuntimeException(ex);
         }
     }
+    public void atualizarUsuario(Usuario usuario){
+        try(Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("""
+                        update t_sf_usuario
+                        set %s = ?, %s = ?, %s = ?,
+                        %s = ?, %s = ?
+                        where id_usuario = ?
+                     """.formatted(
+                                TABLE_COLUMNS.get("EMAIL"),
+                                TABLE_COLUMNS.get("NOME_COMPLETO"),
+                                TABLE_COLUMNS.get("SENHA"),
+                                TABLE_COLUMNS.get("DATA_DE_REGISTRO"),
+                                TABLE_COLUMNS.get("DATA_DE_NASCIMENTO")
+                     )
+             )){
+
+             preparedStatement.setString(1, usuario.getEmail());
+             preparedStatement.setString(2, usuario.getNomeCompleto());
+             preparedStatement.setString(3, usuario.getSenha());
+             preparedStatement.setDate(4, localDateParaDateSQL(usuario.getDataDeRegistro()));
+             preparedStatement.setDate(5,localDateParaDateSQL( usuario.getDataNascimento()));
+             preparedStatement.setLong(6, usuario.getId());
+
+             preparedStatement.executeUpdate();
+
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
 
 

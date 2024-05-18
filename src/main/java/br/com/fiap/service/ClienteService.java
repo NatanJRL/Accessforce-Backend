@@ -59,23 +59,25 @@ public class ClienteService {
     }
 
     public void atualizar(DadosAtualizacaoClienteDTO dados) {
-        Cliente cliente = clienteRepository.getClientById(dados.id());
+        Cliente clienteParaAtualizar = clienteRepository.getClientById(dados.id());
 
-        if (dados.email() != null) cliente.setEmail(dados.email());
+        if (dados.email() != null) clienteParaAtualizar.setEmail(dados.email());
 
-        if (dados.senha() != null) cliente.setSenha(dados.senha());
+        if (dados.senha() != null) clienteParaAtualizar.setSenha(dados.senha());
 
-        if (dados.nomeCompleto() != null) cliente.setNomeCompleto(dados.nomeCompleto());
+        if (dados.nomeCompleto() != null) clienteParaAtualizar.setNomeCompleto(dados.nomeCompleto());
 
 
-//        if (dados.dataNascimento() != null) cliente.setDataNascimento(dados.dataNascimento());
+        if (dados.dataNascimento() != null) clienteParaAtualizar.setDataNascimento(LocalDate.parse(dados.dataNascimento()));
 
-        if (dados.endereco() != null) cliente.setEndereco(new Endereco(dados.endereco()));
+        if (dados.endereco() != null) clienteParaAtualizar.setEndereco(new Endereco(dados.endereco()));
 
-        if (dados.funcao() != null) cliente.setFuncao(dados.funcao());
+        if (dados.funcao() != null) clienteParaAtualizar.setFuncao(dados.funcao());
 
-        if (dados.empresa() != null) cliente.setEmpresa(new Empresa(dados.empresa()));
+        if (dados.empresa() != null) clienteParaAtualizar.setEmpresa(new Empresa(dados.empresa()));
 
-        if (dados.telefone() != null) cliente.setTelefones(List.of(new Telefone(dados.telefone())));
-}
+        if (dados.telefone() != null) clienteParaAtualizar.setTelefones(List.of(new Telefone(dados.telefone())));
+
+        clienteRepository.atualizarCliente(clienteParaAtualizar);
+        }
 }

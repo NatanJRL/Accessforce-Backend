@@ -164,8 +164,15 @@ public class ClienteRepository{
 
     public void atualizarCliente(Cliente cliente){
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement statement = conn.prepareStatement("update t_sf_cliente set %s = ? where id_cliente = ?".formatted())
+             PreparedStatement preparedStatement = conn
+                     .prepareStatement("update t_sf_cliente set %s = ? where id_cliente = ?"
+                             .formatted(TABLE_COLUMNS.get("FUNCAO")))
         ){
+            usuarioRepository.atualizarUsuario(cliente);
+
+            preparedStatement.setString(1, cliente.getFuncao());
+            preparedStatement.setLong(2, cliente.getId());
+            preparedStatement.executeUpdate();
 
         }catch (SQLException ex){
             throw new RuntimeException(ex.getMessage());

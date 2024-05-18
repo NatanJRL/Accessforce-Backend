@@ -3,6 +3,7 @@ package br.com.fiap;
 
 import br.com.fiap.model.cliente.DadosAtualizacaoClienteDTO;
 import br.com.fiap.model.cliente.DadosInsercaoClienteDTO;
+import br.com.fiap.model.cliente.DadosLoginClienteDTO;
 import br.com.fiap.model.cliente.ListagemClienteDTO;
 import br.com.fiap.service.ClienteService;
 import jakarta.inject.Inject;
@@ -36,10 +37,17 @@ public class ClienteResource {
             return Response.status(Response.Status.CREATED).build();
 
     }
+//
+//    @POST
+//    public Response login(DadosLoginClienteDTO dadosLogin){
+//
+//    }
 
     @PUT
-    public void atualizarCliente(DadosAtualizacaoClienteDTO dadosAtualizacao){
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response atualizarCliente(DadosAtualizacaoClienteDTO dadosAtualizacao){
         clienteService.atualizar(dadosAtualizacao);
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @DELETE
