@@ -1,9 +1,6 @@
 package br.com.fiap.service;
 
-import br.com.fiap.model.cliente.Cliente;
-import br.com.fiap.model.cliente.DadosAtualizacaoClienteDTO;
-import br.com.fiap.model.cliente.DadosInsercaoClienteDTO;
-import br.com.fiap.model.cliente.ListagemClienteDTO;
+import br.com.fiap.model.cliente.*;
 import br.com.fiap.model.empresa.Empresa;
 import br.com.fiap.model.endereco.Endereco;
 import br.com.fiap.model.telefone.Telefone;
@@ -80,4 +77,8 @@ public class ClienteService {
 
         clienteRepository.atualizarCliente(clienteParaAtualizar);
         }
+
+    public boolean login(DadosLoginClienteDTO dadosLogin) {
+        return clienteRepository.logarCliente(dadosLogin.email(), dadosLogin.senha());
+    }
 }

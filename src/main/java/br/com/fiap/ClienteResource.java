@@ -37,11 +37,16 @@ public class ClienteResource {
             return Response.status(Response.Status.CREATED).build();
 
     }
-//
-//    @POST
-//    public Response login(DadosLoginClienteDTO dadosLogin){
-//
-//    }
+
+    @POST
+    @Path("login")
+    public Response login(DadosLoginClienteDTO dadosLogin){
+        boolean autorizado = clienteService.login(dadosLogin);
+        if (!autorizado){
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+        return Response.status(Response.Status.OK).build();
+    }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)

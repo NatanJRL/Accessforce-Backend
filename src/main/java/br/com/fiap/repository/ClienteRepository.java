@@ -179,6 +179,24 @@ public class ClienteRepository{
         }
     }
 
+    public boolean logarCliente(String email, String senha) {
+        try(
+                Connection connection = DBConnection.getConnection();
+                PreparedStatement preparedStatement = connection
+                        .prepareStatement("select * from t_sf_usuario where email = ? and senha = ?");
+        ) {
+            preparedStatement.setString(1, email);
+            preparedStatement.setString(2, senha);
+
+            preparedStatement.executeUpdate();
+
+            return preparedStatement.executeQuery().next();
+
+        }catch (SQLException ex){
+            throw new RuntimeException(ex.getMessage());
+        }
+
+    }
     private Cliente createClienteFromResultSet(ResultSet resultSet) throws SQLException{
         return new Cliente(
                 resultSet.getLong(TABLE_COLUMNS.get("ID_DE_USUARIO")),
@@ -204,6 +222,8 @@ public class ClienteRepository{
                         resultSet.getString(TelefoneRepository.TABLE_COLUMNS.get("OBSERVACOES")),
                         TipoTelefone.valueOf(resultSet.getString(TelefoneRepository.TABLE_COLUMNS.get("TIPO_TELEFONE")))));
     }
+
+
 
 
 }
