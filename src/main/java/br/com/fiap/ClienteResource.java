@@ -13,6 +13,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
+import java.util.Optional;
 
 @Path("/clientes")
 public class ClienteResource {
@@ -27,8 +28,8 @@ public class ClienteResource {
     @GET
     @Path(("{id}"))
     @Produces(MediaType.APPLICATION_JSON)
-    public ListagemClienteDTO listarClientePorId(@PathParam("id") Long id){
-        return clienteService.recuperarPorID(id);
+    public Optional<ListagemClienteDTO> listarClientePorId(@PathParam("id") Long id){
+        return Optional.ofNullable(clienteService.recuperarPorID(id));
     }
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

@@ -4,14 +4,11 @@ import br.com.fiap.model.endereco.Endereco;
 import br.com.fiap.model.usuario.Usuario;
 import br.com.fiap.model.empresa.Empresa;
 import br.com.fiap.model.telefone.Telefone;
-import br.com.fiap.produto.ClienteJaPossuiProdutoException;
-import br.com.fiap.produto.Produto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Cliente extends Usuario {
-    private List<Produto> produtos = new ArrayList<>();
     private String funcao;
     private boolean ativo;
     private List<Telefone> telefones = new ArrayList<>();
@@ -72,18 +69,6 @@ public class Cliente extends Usuario {
             }
         }
         this.telefones.add(telefone);
-    }
-
-    public void adicionaProduto(Produto produto){
-        if (produto == null){
-            throw new IllegalArgumentException("Produto inválido");
-        }
-        for(Produto produtoAtual : this.produtos){
-            if(produto.getNome().equals(produtoAtual.getNome())){
-                throw new ClienteJaPossuiProdutoException("Produto já adicionado na lista");
-            }
-        }
-        this.produtos.add(produto);
     }
     public void inativar(){
         this.ativo = false;

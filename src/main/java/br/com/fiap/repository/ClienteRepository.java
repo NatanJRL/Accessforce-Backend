@@ -92,11 +92,11 @@ public class ClienteRepository{
             if (resultSet.next()){
                 return createClienteFromResultSet(resultSet);
             }
+            return null;
 
         }catch (SQLException exception){
             throw new RuntimeException(exception);
         }
-        return null;
     }
 
     public List<Cliente> listarTodos() {

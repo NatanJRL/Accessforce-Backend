@@ -36,13 +36,19 @@ public class ClienteService {
 
     public ListagemClienteDTO recuperarPorID(Long id){
         Cliente cliente = clienteRepository.getClientById(id);
-        return ListagemClienteDTO.fromCliente(cliente);
+        try {
+            return ListagemClienteDTO.fromCliente(cliente);
+        }catch (NullPointerException ex){
+            return null;
+        }
+
     }
 
     public void inserir(DadosInsercaoClienteDTO dados){
         Cliente cliente = new Cliente(dados);
 
         long idCliente = clienteRepository.inserirCliente(cliente);
+
         Telefone telefone = new Telefone(dados.telefone());
         Empresa empresa = new Empresa(dados.empresa());
 

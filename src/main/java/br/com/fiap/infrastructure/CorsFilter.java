@@ -1,4 +1,4 @@
-package br.com.fiap;
+package br.com.fiap.infrastructure;
 
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerResponseContext;

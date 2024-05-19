@@ -22,15 +22,21 @@ public class TelefoneRepository {
             PreparedStatement statement =
                     connection.prepareStatement("""
                             insert into
-                            t_sf_telefone(id_cliente, ddd_telefone, nmr_telefone, tp_telefone)
+                            t_sf_telefone(%s, %s, %s, %s)
                             values
                             (?,?,?,?)
-                            """)
+                            """.formatted(
+                                    TABLE_COLUMNS.get("ID_DO_CLIENTE"),
+                                    TABLE_COLUMNS.get("DDD"),
+                                    TABLE_COLUMNS.get("NUMERO"),
+                                    TABLE_COLUMNS.get("TIPO_TELEFONE")
+                            ))
                 ) {
             statement.setLong(1, idCliente);
             statement.setInt(2, telefone.getDdd());
             statement.setString(3, telefone.getNumero());
             statement.setString(4, telefone.getTipoTelefone().toString());
+
             statement.executeUpdate();
 
         } catch (SQLException e) {
